@@ -33,5 +33,11 @@ public class Marca {
     public String Marca(){
         return "{id: "+id+"}, {nombre: "+nombre+"}";
     }
+
+    @Override
+    public String toString() {
+        return "Marca{" + "id=" + id + ", nombre=" + nombre + '}';
+    }
+    
     
 }

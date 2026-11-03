@@ -34,5 +34,11 @@ public class Categoria {
     public String categoria(){
         return "{id: "+id+"}, {nombre: "+nombre+"}";
     }
+
+    @Override
+    public String toString() {
+        return "Categoria{" + "id=" + id + ", nombre=" + nombre + '}';
+    }
+    
     
 }

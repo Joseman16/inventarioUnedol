@@ -71,5 +71,11 @@ public class Componente {
     public String LeerComponentes (){
         return "Id: "+id+", Nombre: "+nombre+", Marca: "+marca.getNombre()+", Categoría: "+categoria.getNombre()+", funcionamiento: "+funcionamiento;
     }
+
+    @Override
+    public String toString() {
+        return "Componente{" + "id=" + id + ", nombre=" + nombre + ", marca=" + marca + ", categoria=" + categoria + ", funcionamiento=" + funcionamiento + '}';
+    }
+    
     
 }
