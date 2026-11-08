@@ -6,7 +6,9 @@ package com.unedol.inventariounedol.interfaces;
 
 import com.unedol.inventariounedol.entidades.Marca;
 import com.unedol.inventariounedol.util.RegistroMarca;
+import java.awt.event.KeyEvent;
 import java.util.ArrayList;
+import javax.swing.JFrame;
 import javax.swing.table.DefaultTableModel;
 
 /**
@@ -14,14 +16,19 @@ import javax.swing.table.DefaultTableModel;
  * @author Josman
  */
 public class FrmBuscadorMarca extends javax.swing.JFrame {
-
+    
+    private FrmPrincipal formulario;
     RegistroMarca rmar;
-    public FrmBuscadorMarca(RegistroMarca rmar) {
+    
+    public FrmBuscadorMarca(FrmPrincipal formulario ,RegistroMarca rmar) {
         initComponents();
-        
+
+        this.formulario = formulario;
         this.rmar = rmar;
         
-        mostrarTabla();
+         mostrarTabla();
+        
+        setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 
     }
 
@@ -59,6 +66,11 @@ public class FrmBuscadorMarca extends javax.swing.JFrame {
                 "Title 1", "Title 2", "Title 3", "Title 4"
             }
         ));
+        tblMarcas.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                tblMarcasMouseClicked(evt);
+            }
+        });
         jScrollPane1.setViewportView(tblMarcas);
 
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
@@ -80,7 +92,26 @@ public class FrmBuscadorMarca extends javax.swing.JFrame {
 
         jPanel1.setBackground(new java.awt.Color(255, 255, 255));
 
+        txtBuscarMarca.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                txtBuscarMarcaActionPerformed(evt);
+            }
+        });
+        txtBuscarMarca.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                txtBuscarMarcaKeyPressed(evt);
+            }
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                txtBuscarMarcaKeyReleased(evt);
+            }
+        });
+
         btnBuscar.setText("Buscar");
+        btnBuscar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnBuscarActionPerformed(evt);
+            }
+        });
 
         jLabel2.setText("Descripción");
 
@@ -143,6 +174,44 @@ public class FrmBuscadorMarca extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
+    private void txtBuscarMarcaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtBuscarMarcaActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_txtBuscarMarcaActionPerformed
+
+    private void btnBuscarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBuscarActionPerformed
+        mostrarTabla();
+    }//GEN-LAST:event_btnBuscarActionPerformed
+
+    private void txtBuscarMarcaKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtBuscarMarcaKeyReleased
+        if(txtBuscarMarca.getText().trim().equals("")){
+            mostrarTabla();
+        }
+    }//GEN-LAST:event_txtBuscarMarcaKeyReleased
+
+    private void txtBuscarMarcaKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtBuscarMarcaKeyPressed
+        if(evt.getExtendedKeyCode() == KeyEvent.VK_ENTER){
+            mostrarTabla();
+        } 
+    }//GEN-LAST:event_txtBuscarMarcaKeyPressed
+
+    private void tblMarcasMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tblMarcasMouseClicked
+        int fila = tblMarcas.getSelectedRow();
+        if(fila >= 0){
+            int id = Integer.parseInt(
+                    tblMarcas.getValueAt(fila, 0).toString()
+            );
+            
+            String nombre = tblMarcas.getValueAt(fila, 1).toString();
+        
+            Marca mar = new Marca(id, nombre);
+        
+            formulario.cargarMarca(mar);
+            
+            this.dispose();
+        }
+        
+    }//GEN-LAST:event_tblMarcasMouseClicked
+
     /**
      * @param args the command line arguments
      */
@@ -191,10 +260,12 @@ public class FrmBuscadorMarca extends javax.swing.JFrame {
 
     
     private void mostrarTabla(){
+        String busqueda = txtBuscarMarca.getText();
+        
         DefaultTableModel modelo = new DefaultTableModel();
         
         //ArrayList<Marca> marcas = new ArrayList<Marca>();
-        
+         
         //Definir columnas
         modelo.addColumn("Id");
         modelo.addColumn("Nombre");
@@ -203,16 +274,34 @@ public class FrmBuscadorMarca extends javax.swing.JFrame {
         //Ajustar ancho de columnas
         tblMarcas.getColumnModel().getColumn(0).setPreferredWidth(3);
         tblMarcas.getColumnModel().getColumn(0).setPreferredWidth(100);
-      
-        //Recorrer la lista
-        for(int i = 0; i < rmar.retornarMarca2().size(); i ++){
-            Marca mar = rmar.retornarMarca2().get(i);
-            modelo.addRow(new Object[]{
-                mar.getId(),
-                mar.getNombre()
-            });
+
+        if(busqueda == ""){
+            //Recorrer la lista
+            for(int i = 0; i < rmar.retornarMarca2().size(); i ++){
+                Marca mar = rmar.retornarMarca2().get(i);
+                modelo.addRow(new Object[]{
+                    mar.getId(),
+                    mar.getNombre()
+                });
+            }
+        }else{
+            for (int i = 0; i < rmar.retornarMarca2().size(); i ++){
+                Marca mar = rmar.retornarMarca2().get(i);
+                
+                if(mar.getNombre().toLowerCase().startsWith(busqueda.toLowerCase().trim())){
+                    
+                    modelo.addRow(new Object[]{
+                        mar.getId(),
+                        mar.getNombre()
+                    });
+               }
+            }
         }
         
+       
+        
     }
+    
+    
 }
 

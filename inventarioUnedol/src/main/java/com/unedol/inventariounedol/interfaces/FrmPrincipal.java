@@ -1,6 +1,7 @@
 
 package com.unedol.inventariounedol.interfaces;
 
+import com.unedol.inventariounedol.entidades.Categoria;
 import com.unedol.inventariounedol.entidades.Marca;
 import com.unedol.inventariounedol.util.RegistroCategoria;
 import com.unedol.inventariounedol.util.RegistroMarca;
@@ -96,6 +97,11 @@ public class FrmPrincipal extends javax.swing.JFrame {
         pHome.add(btnEstado, new org.netbeans.lib.awtextra.AbsoluteConstraints(25, 116, 119, 51));
 
         btnCrearcat.setText("Crear categoría");
+        btnCrearcat.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnCrearcatActionPerformed(evt);
+            }
+        });
         pHome.add(btnCrearcat, new org.netbeans.lib.awtextra.AbsoluteConstraints(25, 198, 119, 51));
 
         btnCrearmar.setText("Crear Marca");
@@ -152,9 +158,20 @@ public class FrmPrincipal extends javax.swing.JFrame {
         Nombre.setText("Nombre");
         pCrearCategoria.add(Nombre, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 170, -1, -1));
         pCrearCategoria.add(txtNombreCategoria, new org.netbeans.lib.awtextra.AbsoluteConstraints(140, 170, 310, -1));
+
+        txtIdCategoria.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                txtIdCategoriaActionPerformed(evt);
+            }
+        });
         pCrearCategoria.add(txtIdCategoria, new org.netbeans.lib.awtextra.AbsoluteConstraints(140, 120, 120, -1));
 
         btnActualizarCategoria.setText("Eliminar");
+        btnActualizarCategoria.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnActualizarCategoriaActionPerformed(evt);
+            }
+        });
         pCrearCategoria.add(btnActualizarCategoria, new org.netbeans.lib.awtextra.AbsoluteConstraints(390, 240, 100, 40));
 
         btnBuscadorCategoria1.setText("Buscador");
@@ -164,9 +181,19 @@ public class FrmPrincipal extends javax.swing.JFrame {
         pCrearCategoria.add(btnRegresarCategoria, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 390, -1, 40));
 
         btnActualizarCategoria1.setText("Actualizar");
+        btnActualizarCategoria1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnActualizarCategoria1ActionPerformed(evt);
+            }
+        });
         pCrearCategoria.add(btnActualizarCategoria1, new org.netbeans.lib.awtextra.AbsoluteConstraints(220, 240, 100, 40));
 
         btnRegistrarCategoria2.setText("Registrar");
+        btnRegistrarCategoria2.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnRegistrarCategoria2ActionPerformed(evt);
+            }
+        });
         pCrearCategoria.add(btnRegistrarCategoria2, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 240, 100, 40));
 
         pCrearMarca.setBackground(new java.awt.Color(204, 255, 255));
@@ -320,7 +347,7 @@ public class FrmPrincipal extends javax.swing.JFrame {
             
             System.out.println("Marca registrada correctamente!");
             //rmar.mostrarDatos();
-            limpiar();
+            limpiarMarca();
         }catch(Exception e){
             e.printStackTrace();
             JOptionPane.showMessageDialog(null, e.getMessage());
@@ -338,8 +365,8 @@ public class FrmPrincipal extends javax.swing.JFrame {
             Marca marca = new Marca(id, nombre);
             rmar.actualizar(marca);
             
-            System.out.println("Marca actualizada correctamente!");
-            limpiar();
+            System.out.println("Marca actualizada exitosamente!");
+            limpiarMarca();
             
         }catch(Exception e){
             e.printStackTrace();
@@ -357,8 +384,8 @@ public class FrmPrincipal extends javax.swing.JFrame {
             Marca marca = new Marca(id, nombre);
             rmar.eliminar(marca);
             
-            System.out.println("Marca eliminada correctamente!");
-            limpiar();
+            System.out.println("Marca eliminada exitosamente!");
+            limpiarMarca();
         }catch(Exception e){
             e.printStackTrace();
             JOptionPane.showConfirmDialog(null, e.getMessage());
@@ -376,9 +403,67 @@ public class FrmPrincipal extends javax.swing.JFrame {
     }//GEN-LAST:event_txtNombreMarcaActionPerformed
 
     private void btnBuscarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBuscarActionPerformed
-        FrmBuscadorMarca buscador = new FrmBuscadorMarca(rmar);
+        FrmBuscadorMarca buscador = new FrmBuscadorMarca(this, this.rmar);
         buscador.setVisible(true);
     }//GEN-LAST:event_btnBuscarActionPerformed
+
+    private void btnRegistrarCategoria2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRegistrarCategoria2ActionPerformed
+        int id = Integer.parseInt(txtIdCategoria.getText());
+        String categoria = txtNombreCategoria.getText();
+        try{
+            Categoria cat = new Categoria(id, categoria);
+            rcat.insertar(cat);
+            System.out.println("Categoria registrada correctamente!");
+            limpiarCategoria();
+        }catch(Exception e){
+            e.printStackTrace();
+            JOptionPane.showMessageDialog(null, e.getMessage());
+        }
+    }//GEN-LAST:event_btnRegistrarCategoria2ActionPerformed
+
+    private void txtIdCategoriaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtIdCategoriaActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_txtIdCategoriaActionPerformed
+
+    private void btnActualizarCategoria1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnActualizarCategoria1ActionPerformed
+        int id = Integer.valueOf(txtIdCategoria.getText());
+        String nombre = txtNombreCategoria.getText();
+        
+        try{
+            
+            Categoria cat = new Categoria(id, nombre);
+            rcat.actualiz(cat);
+            
+            System.out.println("Categoria actualizada exitosamente!");
+            limpiarCategoria();
+            
+        }catch(Exception e){
+            e.printStackTrace();
+            JOptionPane.showConfirmDialog(null, e.getMessage());
+        } 
+    }//GEN-LAST:event_btnActualizarCategoria1ActionPerformed
+
+    private void btnActualizarCategoriaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnActualizarCategoriaActionPerformed
+        int id = Integer.parseInt(txtIdCategoria.getText());
+        String nombre = txtNombreCategoria.getText();
+        
+        try{
+            Categoria cat = new Categoria(id, nombre);
+            rcat.eliminar(cat);
+            
+            System.out.println("Categoria eliminada exitosamente!");
+            
+            
+        }catch(Exception e){
+            e.printStackTrace();
+            JOptionPane.showMessageDialog(null, e.getMessage());
+        }
+        
+    }//GEN-LAST:event_btnActualizarCategoriaActionPerformed
+
+    private void btnCrearcatActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCrearcatActionPerformed
+        mostrarPanel("categoria");
+    }//GEN-LAST:event_btnCrearcatActionPerformed
 
     /**
      * @param args the command line arguments
@@ -449,9 +534,19 @@ public class FrmPrincipal extends javax.swing.JFrame {
     private javax.swing.JTextField txtNombreMarca;
     // End of variables declaration//GEN-END:variables
 
-    public void limpiar(){
+    public void limpiarMarca(){
         txtIdMarca.setText("");
         txtNombreMarca.setText("");
+    }
+    
+    public void limpiarCategoria(){
+        txtIdCategoria.setText("");
+        txtNombreCategoria.setText("");
+    }
+    
+    public void cargarMarca(Marca mar){
+        txtIdMarca.setText(String.valueOf(mar.getId()));
+        txtNombreMarca.setText(mar.getNombre());
     }
 }
 
